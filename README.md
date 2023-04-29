@@ -1,2 +1,2 @@
 # hiwi-stego-attrib
-More efficient implementation and more detailed evaluation of identified jpeg stego attributes
+More efficient implementation and detailed evaluation of identified jpeg stego attributes.
