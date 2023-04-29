@@ -1,5 +1,5 @@
 #!/bin/bash
 
-docker run --rm -v $(pwd)/samples:/samples stegoattrib:latest
+docker run --name stegoattrib --tty --rm --volume=$(realpath ./samples):/home/attrib/samples stegoattrib:latest "$@"
 
 exit 0

@@ -9,7 +9,7 @@ FROM ubuntu AS default
     RUN apt-get install libmagic1 -y
 
     RUN pip install --no-cache-dir --upgrade pip
-    #RUN pip install --no-cache-dir progress
+    RUN pip install --no-cache-dir progress
     RUN pip install --no-cache-dir python-magic
 
     #exiftool
@@ -36,4 +36,5 @@ FROM ubuntu AS default
 
     RUN apt-get clean
 
-    ENTRYPOINT ["python3", "./main.py"]
+    RUN chmod +x ./entrypoint.sh
+    ENTRYPOINT ["./entrypoint.sh"]
