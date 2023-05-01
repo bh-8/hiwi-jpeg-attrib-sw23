@@ -19,6 +19,31 @@ class Log():
         handle.close()
 
 class LogEntry():
-    def __init__(self, sample, mime):
-        self.sample = str(sample)
-        self.mime = str(mime)
+    def __init__(self, sampleName, originalName, detectedMimeType, jfifVersion, binwalk, fileHeader, foremost, diffColor):
+        self.sampleName = sampleName
+        self.originalName = originalName
+        self.detectedMimeType = detectedMimeType
+        self.blindAttribs = {
+            "jfifVersion": {
+                "attribTool": "exiftool",
+                "data": jfifVersion
+            },
+            "binwalkData": {
+                "attribTool": "binwalk",
+                "data": binwalk
+            },
+            "fileHeader": {
+                "attribTool": "strings",
+                "data": fileHeader
+            },
+            "foremostCarving": {
+                "attribTool": "foremost",
+                "data": foremost
+            }
+        }
+        self.nonBlindAttribs = {
+            "colorMeanDifference": {
+                "attribTool": "imagemagick",
+                "data": diffColor
+            }
+        }

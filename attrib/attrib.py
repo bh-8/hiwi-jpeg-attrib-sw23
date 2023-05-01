@@ -1,35 +1,120 @@
 from jsonLog import LogEntry
 from subprocess import run
 import re
+from pathlib import Path
+import shutil
+import os
 
 class Attribution():
-    def __init__(self, jsonLog, sample, mime):
+    def __init__(self, jsonLog, sampleFile, originalFile, mime):
         self.jsonLog = jsonLog
-        self.sample = sample
+        self.sampleFile = sampleFile
+        self.originalFile = originalFile
         self.mime = mime
 
         self.exiftoolData = None
+    
+    def runAttribTool(self, toolId, execParams):
+        outData = open("./" + toolId + ".tmp", "w")
+        outData.seek(0)
+        run(execParams, stdout=outData, stderr=outData)
+        outData.close()
         
     def blind(self):
-        self.exiftoolData = open("./exiftool.tmp", "w")
-        self.exiftoolData.seek(0)
-        run([
-            "exiftool",
-            str(self.sample)
-        ], stdout=self.exiftoolData)
-        self.exiftoolData.close()
+        if Path("./foremost").exists():
+            shutil.rmtree("./foremost")
+        if Path("./compare_out.jpg").exists():
+            os.remove("./compare_out.jpg")
 
-    def nonBlind(self, original):
-        pass
+        self.runAttribTool("exiftool", [
+            "exiftool",
+            str(self.sampleFile)
+        ])
+        self.runAttribTool("binwalk", [
+            "binwalk",
+            str(self.sampleFile)
+        ])
+        self.runAttribTool("strings", [
+            "strings",
+            str(self.sampleFile)
+        ])
+        self.runAttribTool("foremost", [
+            "foremost",
+            "-o", "./foremost",
+            "-i", str(self.sampleFile)
+        ])
+
+    def nonBlind(self):
+        #run exiftool on original image to compare file size
+        self.runAttribTool("exiftool_orig", [
+            "exiftool",
+            str(self.originalFile)
+        ])
+        #diff. image
+        self.runAttribTool("compare", [
+            "compare",
+            str(self.sampleFile),
+            str(self.originalFile),
+            "-compose", "src",
+            "-highlight-color", "black",
+            "./compare_out.jpg"
+        ])
+        self.runAttribTool("identify", [
+            "identify",
+            "-verbose",
+            "./compare_out.jpg"
+        ])
 
     def flush(self):
-        #TODO continue here.... but only with more diverse test samples
-        #determine if JFIF version can be extracted by exiftool or not
-        with open("./exiftool.tmp", "r") as tmpData:
-            searchPattern = "JFIF Version"
-            for l in tmpData:
-                minL = l.strip().replace(" ", "")
-                if re.search(searchPattern, l):
-                    pass #print(minL)
+        #https://github.com/birnbaum01/amsl-it-security-projects/blob/main/SMKITS5/stego-attrib.sh
+        #TODO: missing exiftool file size comparison
+        #TODO: missing stegoveritas execution and diff. image creation+analysis
+        #TODO: missing attrib evaluation as 3rd field in log file: "conclusion"
 
-        self.jsonLog.add(LogEntry(self.sample, self.mime))
+        ATTR_JFIF_VERSION = None
+        with open("./exiftool.tmp", "r") as tmpData:
+            searchPattern = "JFIF Version:"
+            for l in tmpData:
+                minL = l.strip().replace("  ", "")
+                if re.search(searchPattern, minL):
+                    ATTR_JFIF_VERSION = minL
+                    break
+        
+        ATTR_BINWALK = None
+        with open("./binwalk.tmp", "r") as tmpData:
+            tmpLines = tmpData.readlines()
+            if len(tmpLines) > 4:
+                ATTR_BINWALK = tmpLines[3].strip().replace("  ", "")
+
+        ATTR_FILE_HEADER = None
+        with open("./strings.tmp", "r") as tmpData:
+            tmpLines = tmpData.readlines()
+            if len(tmpLines) > 0:
+                ATTR_FILE_HEADER = ""
+                for i in range(0, 10):
+                    if len(tmpLines) > i:
+                        ATTR_FILE_HEADER += tmpLines[i]
+
+        ATTR_FOREMOST = None
+        if Path("./foremost/jpg/00000000.jpg").exists():
+            ATTR_FOREMOST = "carved, extracted jpg"
+            
+        ATTR_COLOR_MEAN_DIFF = None
+        with open("./identify.tmp", "r") as tmpData:
+            searchPattern = "mean:"
+            for l in tmpData:
+                minL = l.strip().replace("  ", "")
+                if re.search(searchPattern, minL):
+                    ATTR_COLOR_MEAN_DIFF = minL
+                    break
+
+        self.jsonLog.add(LogEntry(
+            str(self.sampleFile.name),
+            str(self.originalFile.name),
+            str(self.mime),
+            ATTR_JFIF_VERSION,
+            ATTR_BINWALK,
+            ATTR_FILE_HEADER,
+            ATTR_FOREMOST,
+            ATTR_COLOR_MEAN_DIFF
+        ))
