@@ -4,6 +4,7 @@ import re
 from pathlib import Path
 import shutil
 import os
+import glob
 
 class Attribution():
     def __init__(self, jsonLog, sampleFile, originalFile, mime):
@@ -15,6 +16,7 @@ class Attribution():
     def runAttribTool(self, toolId, execParams):
         outData = open("./" + toolId + ".tmp", "w")
         outData.seek(0)
+        #print(str(execParams))
         run(execParams, stdout=outData, stderr=outData)
         outData.close()
         
@@ -62,12 +64,23 @@ class Attribution():
             "-verbose",
             "./compare_out.jpg"
         ])
+        self.runAttribTool("stegoveritas", [
+            "stegoveritas",
+            "-out",
+            "./stegoveritas",
+            "-meta",
+            "-imageTransform",
+            "-trailing",
+            "-steghide",
+            str(self.sampleFile)
+        ])
+
 
     def flush(self):
         #https://github.com/birnbaum01/amsl-it-security-projects/blob/main/SMKITS5/stego-attrib.sh
         #TODO: missing exiftool file size comparison
-        #TODO: missing stegoveritas execution and diff. image creation+analysis
-        #TODO: missing attrib evaluation as 3rd field in log file: "conclusion"
+        #TODO: missing stegoveritas diff. image creation+analysis
+        #TODO: missing attrib evaluation as 3rd field in log file: conclusion
 
         ATTR_JFIF_VERSION = None
         with open("./exiftool.tmp", "r") as tmpData:
