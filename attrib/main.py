@@ -10,7 +10,7 @@ import magic
 mime = magic.Magic(mime=True)
 
 JPG_MIME = "image/jpeg" #jpg images only
-STEGO_TOOLS = ["f5"] #tools we can attribute
+STEGO_TOOLS = ["f5", "jphide", "jsteg", "outguess", "steghide"] #tools we can attribute
 
 INPUT_STRUCTURE = Path("./io").resolve()
 PATH_ORIG = INPUT_STRUCTURE.joinpath("./input")
@@ -38,13 +38,17 @@ for stegoToolId in STEGO_TOOLS:
         jsonData = json.load(jsonHandle)
         
         progressBar = customProgress.ProgressBar("Attributing '" + str(stegoLogFile.name) + "'...", max = len(jsonData))
-        jsonLog = jsonLog.Log(INPUT_STRUCTURE.joinpath(Path(str(stegoLogFile)).stem + ".attribution.json"))
+        jsonLogObj = jsonLog.Log(INPUT_STRUCTURE.joinpath(Path(str(stegoLogFile)).stem + ".attribution.json"))
 
         for toolExecution in jsonData:
             ##########
             # QA
 
             potentialStegoFileName = toolExecution["outputFileName"]
+            if potentialStegoFileName == None:
+                progressBar.next()
+                continue
+
             potentialStegoFile = PATH_STEGO.joinpath(potentialStegoFileName)
             if not potentialStegoFile.is_file():
                 progressBar.next()
@@ -68,7 +72,7 @@ for stegoToolId in STEGO_TOOLS:
             ##########
             # Attribution
 
-            attr = Attribution(jsonLog, potentialStegoFile, relatedOriginalFile, inputMime)
+            attr = Attribution(jsonLogObj, potentialStegoFile, relatedOriginalFile, inputMime)
             attr.blind() #run blind tools
             attr.nonBlind() #run non-blind tools
             attr.flush() #evaluate and out
@@ -76,6 +80,6 @@ for stegoToolId in STEGO_TOOLS:
             progressBar.next()
 
         jsonHandle.close()
-        jsonLog.writeJson()
+        jsonLogObj.writeJson()
         progressBar.finish()
 sys.exit(0)

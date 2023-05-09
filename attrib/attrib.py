@@ -11,8 +11,6 @@ class Attribution():
         self.sampleFile = sampleFile
         self.originalFile = originalFile
         self.mime = mime
-
-        self.exiftoolData = None
     
     def runAttribTool(self, toolId, execParams):
         outData = open("./" + toolId + ".tmp", "w")
