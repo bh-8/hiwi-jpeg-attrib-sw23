@@ -19,7 +19,9 @@ class Log():
         handle.close()
 
 class LogEntry():
-    def __init__(self, sampleName, originalName, detectedMimeType, jfifVersion, binwalk, fileHeader, foremost, diffColor):
+    def __init__(self, sampleName, originalName, detectedMimeType, jfifVersion, binwalk, fileHeader, foremost, fileSize, diffColor, diffColorRgb):
+        #TODO: missing attrib evaluation as 3rd field in log file: conclusion
+        # #https://github.com/birnbaum01/amsl-it-security-projects/blob/main/SMKITS5/stego-attrib.sh
         self.sampleName = sampleName
         self.originalName = originalName
         self.detectedMimeType = detectedMimeType
@@ -38,12 +40,21 @@ class LogEntry():
             },
             "foremostCarving": {
                 "attribTool": "foremost",
-                "data": foremost
+                "data": foremost,
+                "potentialStego": "jsteg" if foremost == None else "-"
             }
         }
         self.nonBlindAttribs = {
+            "fileSize": {
+                "attribTool": "exiftool",
+                "data": fileSize
+            },
             "colorMeanDifference": {
                 "attribTool": "imagemagick",
                 "data": diffColor
+            },
+            "colorMeanDifferenceRgb": {
+                "attribTool": "stegoveritas, imagemagick",
+                "data": diffColorRgb
             }
         }

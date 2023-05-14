@@ -73,9 +73,8 @@ for stegoToolId in STEGO_TOOLS:
             # Attribution
 
             attr = Attribution(jsonLogObj, potentialStegoFile, relatedOriginalFile, inputMime)
-            attr.blind() #run blind tools
-            attr.nonBlind() #run non-blind tools
-            attr.flush() #evaluate and out
+            attr.execute()
+            attr.attribute()
 
             progressBar.next()
 

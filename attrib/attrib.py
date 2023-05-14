@@ -20,11 +20,22 @@ class Attribution():
         run(execParams, stdout=outData, stderr=outData)
         outData.close()
         
-    def blind(self):
+    def execute(self):
         if Path("./foremost").exists():
             shutil.rmtree("./foremost")
+        if Path("./stegoveritas_stego").exists():
+            shutil.rmtree("./stegoveritas_stego")
+        if Path("./stegoveritas_original").exists():
+            shutil.rmtree("./stegoveritas_original")
+
         if Path("./compare_out.jpg").exists():
             os.remove("./compare_out.jpg")
+        if Path("./compare_red.png").exists():
+            os.remove("./compare_red.png")
+        if Path("./compare_green.png").exists():
+            os.remove("./compare_green.png")
+        if Path("./compare_blue.png").exists():
+            os.remove("./compare_blue.png")
 
         self.runAttribTool("exiftool", [
             "exiftool",
@@ -44,13 +55,10 @@ class Attribution():
             "-i", str(self.sampleFile)
         ])
 
-    def nonBlind(self):
-        #run exiftool on original image to compare file size
         self.runAttribTool("exiftool_orig", [
             "exiftool",
             str(self.originalFile)
         ])
-        #diff. image
         self.runAttribTool("compare", [
             "compare",
             str(self.sampleFile),
@@ -67,21 +75,93 @@ class Attribution():
         self.runAttribTool("stegoveritas", [
             "stegoveritas",
             "-out",
-            "./stegoveritas",
+            "./stegoveritas_original",
+            "-imageTransform",
+            str(self.originalFile)
+        ])
+        self.runAttribTool("stegoveritas", [
+            "stegoveritas",
+            "-out",
+            "./stegoveritas_stego",
             "-meta",
             "-imageTransform",
             "-trailing",
             "-steghide",
             str(self.sampleFile)
         ])
+        self.runAttribTool("compare_red", [
+            "compare",
+            "./stegoveritas_stego/" + self.sampleFile.name + "_red_plane.png",
+            "./stegoveritas_original/" + self.originalFile.name + "_red_plane.png",
+            "-compose", "src",
+            "-highlight-color", "black",
+            "./compare_red.png"
+        ])
+        self.runAttribTool("compare_green", [
+            "compare",
+            "./stegoveritas_stego/" + self.sampleFile.name + "_green_plane.png",
+            "./stegoveritas_original/" + self.originalFile.name + "_green_plane.png",
+            "-compose", "src",
+            "-highlight-color", "black",
+            "./compare_green.png"
+        ])
+        self.runAttribTool("compare_blue", [
+            "compare",
+            "./stegoveritas_stego/" + self.sampleFile.name + "_blue_plane.png",
+            "./stegoveritas_original/" + self.originalFile.name + "_blue_plane.png",
+            "-compose", "src",
+            "-highlight-color", "black",
+            "./compare_blue.png"
+        ])
+        self.runAttribTool("identify_red", [
+            "identify",
+            "-verbose",
+            "./compare_red.png"
+        ])
+        self.runAttribTool("identify_green", [
+            "identify",
+            "-verbose",
+            "./compare_green.png"
+        ])
+        self.runAttribTool("identify_blue", [
+            "identify",
+            "-verbose",
+            "./compare_blue.png"
+        ])
 
+    def convertFileSize(self, fileSizeStr):
+        split = fileSizeStr.split(":")[1].strip().split(" ")
+        num = float(split[0])
+        unit = split[1].lower()
+        match unit:
+            case "bytes":
+                return num
+            case "kib":
+                return num * 1024
+            case "mib":
+                return num * 1024 * 1024
+            case _:
+                return -1
 
-    def flush(self):
-        #https://github.com/birnbaum01/amsl-it-security-projects/blob/main/SMKITS5/stego-attrib.sh
-        #TODO: missing exiftool file size comparison
-        #TODO: missing stegoveritas diff. image creation+analysis
-        #TODO: missing attrib evaluation as 3rd field in log file: conclusion
+    def parseFileSize(self, exiftoolId):
+        with open("./" + exiftoolId + ".tmp", "r") as tmpData:
+            searchPattern = "File Size"
+            for l in tmpData:
+                minL = l.strip().replace("  ", "")
+                if re.search(searchPattern, minL):
+                    return int(self.convertFileSize(minL))
+        return -1
 
+    def parseColorMean(self, identifyId):
+        with open("./" + identifyId + ".tmp", "r") as tmpData:
+            searchPattern = "mean:"
+            for l in tmpData:
+                minL = l.strip().replace("  ", "")
+                if re.search(searchPattern, minL):
+                    return minL
+            return None
+
+    def attribute(self):
         ATTR_JFIF_VERSION = None
         with open("./exiftool.tmp", "r") as tmpData:
             searchPattern = "JFIF Version:"
@@ -90,7 +170,7 @@ class Attribution():
                 if re.search(searchPattern, minL):
                     ATTR_JFIF_VERSION = minL
                     break
-        
+
         ATTR_BINWALK = None
         with open("./binwalk.tmp", "r") as tmpData:
             tmpLines = tmpData.readlines()
@@ -109,15 +189,16 @@ class Attribution():
         ATTR_FOREMOST = None
         if Path("./foremost/jpg/00000000.jpg").exists():
             ATTR_FOREMOST = "carved, extracted jpg"
-            
-        ATTR_COLOR_MEAN_DIFF = None
-        with open("./identify.tmp", "r") as tmpData:
-            searchPattern = "mean:"
-            for l in tmpData:
-                minL = l.strip().replace("  ", "")
-                if re.search(searchPattern, minL):
-                    ATTR_COLOR_MEAN_DIFF = minL
-                    break
+
+        stegoFileSize = self.parseFileSize("exiftool")
+        originalFileSize = self.parseFileSize("exiftool_orig")
+        ATTR_FILE_SIZE = "Stego File: " + str(stegoFileSize) + ", Original File: " + str(originalFileSize) + ", Difference: " + str(abs(stegoFileSize - originalFileSize))
+
+        ATTR_COLOR_MEAN_DIFF = self.parseColorMean("identify")
+        colorMeanDiffRed = self.parseColorMean("identify_red")
+        colorMeanDiffGreen = self.parseColorMean("identify_green")
+        colorMeanDiffBlue = self.parseColorMean("identify_blue")
+        ATTR_COLOR_MEAN_DIFF_RGB = str(colorMeanDiffRed) + ", " + str(colorMeanDiffGreen) + ", " + str(colorMeanDiffBlue)
 
         self.jsonLog.add(LogEntry(
             str(self.sampleFile.name),
@@ -127,5 +208,7 @@ class Attribution():
             ATTR_BINWALK,
             ATTR_FILE_HEADER,
             ATTR_FOREMOST,
-            ATTR_COLOR_MEAN_DIFF
+            ATTR_FILE_SIZE,
+            ATTR_COLOR_MEAN_DIFF,
+            ATTR_COLOR_MEAN_DIFF_RGB
         ))
