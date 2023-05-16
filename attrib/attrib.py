@@ -194,11 +194,10 @@ class Attribution():
         originalFileSize = self.parseFileSize("exiftool_orig")
         ATTR_FILE_SIZE = "Stego File: " + str(stegoFileSize) + ", Original File: " + str(originalFileSize) + ", Difference: " + str(abs(stegoFileSize - originalFileSize))
 
-        ATTR_COLOR_MEAN_DIFF = self.parseColorMean("identify")
         colorMeanDiffRed = self.parseColorMean("identify_red")
         colorMeanDiffGreen = self.parseColorMean("identify_green")
         colorMeanDiffBlue = self.parseColorMean("identify_blue")
-        ATTR_COLOR_MEAN_DIFF_RGB = str(colorMeanDiffRed) + ", " + str(colorMeanDiffGreen) + ", " + str(colorMeanDiffBlue)
+        ATTR_COLOR_MEAN_DIFF_DRGB = str(self.parseColorMean("identify")) + ", " + str(colorMeanDiffRed) + ", " + str(colorMeanDiffGreen) + ", " + str(colorMeanDiffBlue)
 
         self.jsonLog.add(LogEntry(
             str(self.sampleFile.name),
@@ -209,6 +208,5 @@ class Attribution():
             ATTR_FILE_HEADER,
             ATTR_FOREMOST,
             ATTR_FILE_SIZE,
-            ATTR_COLOR_MEAN_DIFF,
-            ATTR_COLOR_MEAN_DIFF_RGB
+            ATTR_COLOR_MEAN_DIFF_DRGB
         ))

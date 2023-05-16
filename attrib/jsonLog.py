@@ -20,7 +20,7 @@ class Log():
         handle.close()
 
 class LogEntry():
-    def __init__(self, sampleName, originalName, detectedMimeType, jfifVersion, binwalk, fileHeader, foremost, fileSize, diffColor, diffColorRgb):
+    def __init__(self, sampleName, originalName, detectedMimeType, jfifVersion, binwalk, fileHeader, foremost, fileSize, diffColorDRgb):
         #TODO: missing attrib evaluation as 3rd field in log file: conclusion
         # #https://github.com/birnbaum01/amsl-it-security-projects/blob/main/SMKITS5/stego-attrib.sh
         self.sampleName = sampleName
@@ -55,13 +55,8 @@ class LogEntry():
                 "result": evaluate("fileSize", fileSize)
             },
             "colorMeanDifference": {
-                "attribTool": "imagemagick",
-                "data": diffColor,
-                "result": evaluate("colorMeanDifference", diffColor)
-            },
-            "colorMeanDifferenceRgb": {
                 "attribTool": "stegoveritas, imagemagick",
-                "data": diffColorRgb,
-                "result": evaluate("colorMeanDifferenceRgb", diffColorRgb)
+                "data": diffColorDRgb,
+                "result": evaluate("colorMeanDifference", diffColorDRgb)
             }
         }

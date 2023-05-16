@@ -28,24 +28,16 @@ def evaluate(attribName, attribValue):
                 return ["jphide", "steghide"]
             return []
         case "colorMeanDifference":
-            if not attribValue == None:
-                blankSplit = attribValue.split(" ")
-                colorMean = float(blankSplit[1])
-
-                if colorMean > 127:
-                    return ["jphide", "steghide"]
-            return []
-        case "colorMeanDifferenceRgb":
             commaSplit = list(map(str.strip, attribValue.split(",")))
 
-            if commaSplit[0] != "None" and commaSplit[1] != "None" and commaSplit[2] != "None":
-                colorMeanR = float(commaSplit[0].split(" ")[1])
-                colorMeanG = float(commaSplit[1].split(" ")[1])
-                colorMeanB = float(commaSplit[2].split(" ")[1])
-                
-                theta = 100
-                #TODO: compare with color Difference Mean: if abweichung > 1% -> jphide/steghide --> besseres attribut!
-                #TODO: gegentest mit recompression!
-                if colorMeanR > theta and colorMeanG > theta and colorMeanB > theta:
+            if commaSplit[0] != "None" and commaSplit[1] != "None" and commaSplit[2] != "None" and commaSplit[3] != "None":
+                colorMean = float(commaSplit[0].split(" ")[1])
+                colorMeanR = float(commaSplit[1].split(" ")[1])
+                colorMeanG = float(commaSplit[2].split(" ")[1])
+                colorMeanB = float(commaSplit[3].split(" ")[1])
+
+                colorMeanMean = (colorMeanR + colorMeanG + colorMeanB) / 3
+
+                if colorMean > 127 and colorMean > colorMeanMean - 2.56 and colorMean < colorMeanMean + 2.56:
                     return ["jphide", "steghide"]
             return []
