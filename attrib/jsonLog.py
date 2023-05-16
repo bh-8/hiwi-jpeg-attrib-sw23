@@ -1,4 +1,5 @@
 from json import JSONEncoder
+from evaluate import evaluate
 
 class LogJsonEncoder(JSONEncoder):
     def default(self, o):
@@ -28,33 +29,39 @@ class LogEntry():
         self.blindAttribs = {
             "jfifVersion": {
                 "attribTool": "exiftool",
-                "data": jfifVersion
+                "data": jfifVersion,
+                "result": evaluate("jfifVersion", jfifVersion)
             },
             "binwalkData": {
                 "attribTool": "binwalk",
-                "data": binwalk
+                "data": binwalk,
+                "result": evaluate("binwalkData", binwalk)
             },
             "fileHeader": {
                 "attribTool": "strings",
-                "data": fileHeader
+                "data": fileHeader,
+                "result": evaluate("fileHeader", fileHeader)
             },
             "foremostCarving": {
                 "attribTool": "foremost",
                 "data": foremost,
-                "potentialStego": "jsteg" if foremost == None else "-"
+                "result": evaluate("foremostCarving", foremost)
             }
         }
         self.nonBlindAttribs = {
             "fileSize": {
                 "attribTool": "exiftool",
-                "data": fileSize
+                "data": fileSize,
+                "result": evaluate("fileSize", fileSize)
             },
             "colorMeanDifference": {
                 "attribTool": "imagemagick",
-                "data": diffColor
+                "data": diffColor,
+                "result": evaluate("colorMeanDifference", diffColor)
             },
             "colorMeanDifferenceRgb": {
                 "attribTool": "stegoveritas, imagemagick",
-                "data": diffColorRgb
+                "data": diffColorRgb,
+                "result": evaluate("colorMeanDifferenceRgb", diffColorRgb)
             }
         }
