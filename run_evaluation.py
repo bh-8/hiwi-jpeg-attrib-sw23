@@ -21,26 +21,42 @@ def evaluate(attribObj, attribType, attribName, stegoToolIdentifier):
     if not "_total" in evaluationDictionary[stegoToolIdentifier][attribType][attribName]:
         evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_total"] = 0
     evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_total"] += 1
-    if not "_correct" in evaluationDictionary[stegoToolIdentifier][attribType][attribName]:
-        evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_correct"] = 0
-    if not "_correctRate" in evaluationDictionary[stegoToolIdentifier][attribType][attribName]:
-        evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_correctRate"] = 0
-    if not "_incorrect" in evaluationDictionary[stegoToolIdentifier][attribType][attribName]:
-        evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_incorrect"] = 0
-    if not "_incorrectRate" in evaluationDictionary[stegoToolIdentifier][attribType][attribName]:
-        evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_incorrectRate"] = 0
+
+    if not "_correct_in_list" in evaluationDictionary[stegoToolIdentifier][attribType][attribName]:
+        evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_correct_in_list"] = 0
+    if not "_incorrect_in_list" in evaluationDictionary[stegoToolIdentifier][attribType][attribName]:
+        evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_incorrect_in_list"] = 0
+    if not "_true_positives" in evaluationDictionary[stegoToolIdentifier][attribType][attribName]:
+        evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_true_positives"] = 0
+    if not "_false_positives" in evaluationDictionary[stegoToolIdentifier][attribType][attribName]:
+        evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_false_positives"] = 0
+    if not "_true_negatives" in evaluationDictionary[stegoToolIdentifier][attribType][attribName]:
+        evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_true_negatives"] = 0
+    if not "_false_negatives" in evaluationDictionary[stegoToolIdentifier][attribType][attribName]:
+        evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_false_negatives"] = 0
 
     attribResult = attribObj[attribType][attribName]["result"]
-    for attribTool in attribResult:
-        if not attribTool in evaluationDictionary[stegoToolIdentifier][attribType][attribName] :
-            evaluationDictionary[stegoToolIdentifier][attribType][attribName][attribTool] = 0
-        evaluationDictionary[stegoToolIdentifier][attribType][attribName][attribTool] += 1
-        if stegoToolName == attribTool:
-            evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_correct"] += 1
-            evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_correctRate"] = evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_correct"] / evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_total"]
+
+    if(len(attribResult) == 0): #if no tools in result list --> attributed as original image
+        if stegoToolName == "imrecompjpg": #if true negative TODO: OR -> add flickr later
+            evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_true_negatives"] += 1
         else:
-            evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_incorrect"] += 1
-            evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_incorrectRate"] = evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_incorrect"] / (evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_total"])
+            evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_false_negatives"] += 1
+    else:
+        for attribTool in attribResult:
+            #count apparent tool detects
+            if not attribTool in evaluationDictionary[stegoToolIdentifier][attribType][attribName]:
+                evaluationDictionary[stegoToolIdentifier][attribType][attribName][attribTool] = 0
+            evaluationDictionary[stegoToolIdentifier][attribType][attribName][attribTool] += 1
+
+            if stegoToolName == attribTool:
+                if(len(attribResult) == 1): #if attribution is unique
+                    evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_true_positives"] += 1
+                evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_correct_in_list"] += 1
+            else:
+                if(len(attribResult) == 1): #if attribution is unique
+                    evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_false_positives"] += 1
+                evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_incorrect_in_list"] += 1
 
 if not inputDirectory.exists():
     print("Could not find io directory at '" + str(inputDirectory) + "'!")
