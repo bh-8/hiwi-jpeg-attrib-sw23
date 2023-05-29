@@ -10,7 +10,7 @@ import magic
 mime = magic.Magic(mime=True)
 
 JPG_MIME = "image/jpeg" #jpg images only
-STEGO_TOOLS = ["f5", "jphide", "jsteg", "outguess", "steghide"] #tools we can attribute
+STEGO_TOOLS = ["f5", "jphide", "jsteg", "outguess", "steghide", "imrecompjpg"] #tools we can attribute
 
 INPUT_STRUCTURE = Path("./io").resolve()
 PATH_ORIG = INPUT_STRUCTURE.joinpath("./input")
