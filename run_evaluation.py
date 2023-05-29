@@ -80,4 +80,59 @@ handle = open(inputDirectory.joinpath("_attrib_evaluation.json"), "w")
 handle.seek(0)
 handle.write(json.dumps(evaluationDictionary))
 handle.close()
+
+print("Creating CSVs...")
+
+def attribToCsv(attribResults):
+    outCsv = str(attribResults["_total"])
+    outCsv += "," + str(attribResults["_correct_in_list"])
+    outCsv += "," + str(attribResults["_incorrect_in_list"])
+    outCsv += "," + str(attribResults["_true_positives"])
+    outCsv += "," + str(attribResults["_false_positives"])
+    outCsv += "," + str(attribResults["_true_negatives"])
+    outCsv += "," + str(attribResults["_false_negatives"])
+
+    outCsv += "," + (str(attribResults["jphide"]) if "jphide" in attribResults else "0")
+    outCsv += "," + (str(attribResults["jsteg"]) if "jsteg" in attribResults else "0")
+    outCsv += "," + (str(attribResults["outguess"]) if "outguess" in attribResults else "0")
+    outCsv += "," + (str(attribResults["steghide"]) if "steghide" in attribResults else "0")
+    outCsv += "," + (str(attribResults["f5"]) if "f5" in attribResults else "0")
+
+    return outCsv
+
+def jsonToCsv():
+    global evaluationDictionary
+
+    outputCsv = ""
+
+    for t in evaluationDictionary:
+        jsonIdentifier = str(t)
+        tObj = evaluationDictionary[jsonIdentifier]
+        stegoToolName = tObj["stegoTool"]
+
+        outputCsv += jsonIdentifier + "," + stegoToolName + "\n"
+        outputCsv += "attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5" + "\n"
+
+        bObj = tObj["blindAttribs"]
+        nbObj = tObj["nonBlindAttribs"]
+
+        outputCsv += "blind,jfifVersion," + attribToCsv(bObj["jfifVersion"]) + "\n"
+        outputCsv += "blind,binwalkData," + attribToCsv(bObj["binwalkData"]) + "\n"
+        outputCsv += "blind,fileHeader," + attribToCsv(bObj["fileHeader"]) + "\n"
+        outputCsv += "blind,foremostCarving," + attribToCsv(bObj["foremostCarving"]) + "\n"
+        
+        outputCsv += "non-blind,fileSize," + attribToCsv(nbObj["fileSize"]) + "\n"
+        outputCsv += "non-blind,colorMeanDifference," + attribToCsv(nbObj["colorMeanDifference"]) + "\n"
+
+        outputCsv += "\n"
+        
+    return outputCsv
+
+csv = jsonToCsv()
+
+handle = open(inputDirectory.joinpath("_attrib_evaluation_table.csv"), "w")
+handle.seek(0)
+handle.write(csv)
+handle.close()
+
 print("Done!")
