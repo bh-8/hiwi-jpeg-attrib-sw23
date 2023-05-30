@@ -1,61 +1,60 @@
-jphide.1685380255.7506313,jphide
-attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
-blind,jfifVersion,1000,0,0,0,0,0,1000,0,0,0,0,0
-blind,binwalkData,1000,0,0,0,0,0,1000,0,0,0,0,0
-blind,fileHeader,1000,1000,0,1000,0,0,0,1000,0,0,0,0
-blind,foremostCarving,1000,0,0,0,0,0,1000,0,0,0,0,0
-non-blind,fileSize,1000,1000,1000,0,0,0,0,1000,0,0,1000,0
-non-blind,colorMeanDifference,1000,921,921,0,0,0,79,921,0,0,921,0
-
-imrecompjpg.1685380235.7032592,imrecompjpg
-attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
-blind,jfifVersion,1000,0,0,0,0,1000,0,0,0,0,0,0
-blind,binwalkData,1000,0,0,0,0,1000,0,0,0,0,0,0
-blind,fileHeader,1000,0,1000,0,1000,0,0,1000,0,0,0,0
-blind,foremostCarving,1000,0,0,0,0,1000,0,0,0,0,0,0
-non-blind,fileSize,1000,0,1134,0,0,433,0,567,0,0,567,0
-non-blind,colorMeanDifference,1000,0,650,0,0,675,0,325,0,0,325,0
-
-outguess.1685380291.1467912,outguess
-attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
-blind,jfifVersion,1000,0,0,0,0,0,1000,0,0,0,0,0
-blind,binwalkData,1000,0,0,0,0,0,1000,0,0,0,0,0
-blind,fileHeader,1000,1000,1000,0,0,0,0,0,0,1000,1000,0
-blind,foremostCarving,1000,0,0,0,0,0,1000,0,0,0,0,0
-non-blind,fileSize,1000,0,730,0,0,0,635,365,0,0,365,0
-non-blind,colorMeanDifference,1000,0,0,0,0,0,1000,0,0,0,0,0
-
-jsteg.1685380267.2073627,jsteg
-attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
-blind,jfifVersion,1000,1000,0,1000,0,0,0,0,1000,0,0,0
-blind,binwalkData,1000,1000,0,1000,0,0,0,0,1000,0,0,0
-blind,fileHeader,1000,1000,0,1000,0,0,0,0,1000,0,0,0
-blind,foremostCarving,1000,1000,0,1000,0,0,0,0,1000,0,0,0
-non-blind,fileSize,1000,0,730,0,0,0,635,365,0,0,365,0
-non-blind,colorMeanDifference,1000,0,0,0,0,0,1000,0,0,0,0,0
-
-steghide.1685380318.6665375,steghide
-attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
-blind,jfifVersion,1000,0,0,0,0,0,1000,0,0,0,0,0
-blind,binwalkData,1000,0,0,0,0,0,1000,0,0,0,0,0
-blind,fileHeader,1000,338,338,0,0,0,662,0,0,338,338,0
-blind,foremostCarving,1000,0,0,0,0,0,1000,0,0,0,0,0
-non-blind,fileSize,1000,1000,1000,0,0,0,0,1000,0,0,1000,0
-non-blind,colorMeanDifference,1000,991,991,0,0,0,9,991,0,0,991,0
-
-f5.1685380333.2934344,f5
-attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
-blind,jfifVersion,1000,0,0,0,0,0,1000,0,0,0,0,0
-blind,binwalkData,1000,0,0,0,0,0,1000,0,0,0,0,0
-blind,fileHeader,1000,1000,0,1000,0,0,0,0,0,0,0,1000
-blind,foremostCarving,1000,0,0,0,0,0,1000,0,0,0,0,0
-non-blind,fileSize,1000,0,1282,0,0,0,359,641,0,0,641,0
-non-blind,colorMeanDifference,1000,0,0,0,0,0,1000,0,0,0,0,0
-
-original.id.id,original
-attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
-blind,jfifVersion,30,0,0,0,0,30,0,0,0,0,0,0
-blind,binwalkData,30,0,0,0,0,30,0,0,0,0,0,0
-blind,fileHeader,30,0,30,0,30,0,0,29,0,0,0,1
-blind,foremostCarving,30,0,0,0,0,30,0,0,0,0,0,0
-
+jphide.1685380255.7506313,jphide,,,,,,,,,,,,,
+attribute type,attribute,,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
+blind,jfifVersion,,1000,0,0,0,0,0,1000,0,0,0,0,0
+blind,binwalkData,,1000,0,0,0,0,0,1000,0,0,0,0,0
+blind,fileHeader,"R, U",1000,1000,0,1000,0,0,0,1000,0,0,0,0
+blind,foremostCarving,,1000,0,0,0,0,0,1000,0,0,0,0,0
+non-blind,fileSize,R,1000,1000,1000,0,0,0,0,1000,0,0,1000,0
+non-blind,colorMeanDifference,R,1000,921,921,0,0,0,79,921,0,0,921,0
+,,,,,,,,,,,,,,
+imrecompjpg.1685380235.7032592,imrecompjpg,,,,,,,,,,,,,
+attribute type,attribute,,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
+blind,jfifVersion,,1000,0,0,0,0,1000,0,0,0,0,0,0
+blind,binwalkData,,1000,0,0,0,0,1000,0,0,0,0,0,0
+blind,fileHeader,,1000,0,1000,0,1000,0,0,1000,0,0,0,0
+blind,foremostCarving,,1000,0,0,0,0,1000,0,0,0,0,0,0
+non-blind,fileSize,,1000,0,1134,0,0,433,0,567,0,0,567,0
+non-blind,colorMeanDifference,,1000,0,650,0,0,675,0,325,0,0,325,0
+,,,,,,,,,,,,,,
+outguess.1685380291.1467912,outguess,,,,,,,,,,,,,
+attribute type,attribute,,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
+blind,jfifVersion,,1000,0,0,0,0,0,1000,0,0,0,0,0
+blind,binwalkData,,1000,0,0,0,0,0,1000,0,0,0,0,0
+blind,fileHeader,R,1000,1000,1000,0,0,0,0,0,0,1000,1000,0
+blind,foremostCarving,,1000,0,0,0,0,0,1000,0,0,0,0,0
+non-blind,fileSize,,1000,0,730,0,0,0,635,365,0,0,365,0
+non-blind,colorMeanDifference,,1000,0,0,0,0,0,1000,0,0,0,0,0
+,,,,,,,,,,,,,,
+jsteg.1685380267.2073627,jsteg,,,,,,,,,,,,,
+attribute type,attribute,,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
+blind,jfifVersion,"R, U",1000,1000,0,1000,0,0,0,0,1000,0,0,0
+blind,binwalkData,"R, U",1000,1000,0,1000,0,0,0,0,1000,0,0,0
+blind,fileHeader,"R, U",1000,1000,0,1000,0,0,0,0,1000,0,0,0
+blind,foremostCarving,"R, U",1000,1000,0,1000,0,0,0,0,1000,0,0,0
+non-blind,fileSize,,1000,0,730,0,0,0,635,365,0,0,365,0
+non-blind,colorMeanDifference,,1000,0,0,0,0,0,1000,0,0,0,0,0
+,,,,,,,,,,,,,,
+steghide.1685380318.6665375,steghide,,,,,,,,,,,,,
+attribute type,attribute,,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
+blind,jfifVersion,,1000,0,0,0,0,0,1000,0,0,0,0,0
+blind,binwalkData,,1000,0,0,0,0,0,1000,0,0,0,0,0
+blind,fileHeader,R,1000,338,338,0,0,0,662,0,0,338,338,0
+blind,foremostCarving,,1000,0,0,0,0,0,1000,0,0,0,0,0
+non-blind,fileSize,R,1000,1000,1000,0,0,0,0,1000,0,0,1000,0
+non-blind,colorMeanDifference,R,1000,991,991,0,0,0,9,991,0,0,991,0
+,,,,,,,,,,,,,,
+f5.1685380333.2934344,f5,,,,,,,,,,,,,
+attribute type,attribute,,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
+blind,jfifVersion,,1000,0,0,0,0,0,1000,0,0,0,0,0
+blind,binwalkData,,1000,0,0,0,0,0,1000,0,0,0,0,0
+blind,fileHeader,"R, U",1000,1000,0,1000,0,0,0,0,0,0,0,1000
+blind,foremostCarving,,1000,0,0,0,0,0,1000,0,0,0,0,0
+non-blind,fileSize,,1000,0,1282,0,0,0,359,641,0,0,641,0
+non-blind,colorMeanDifference,,1000,0,0,0,0,0,1000,0,0,0,0,0
+,,,,,,,,,,,,,,
+original.id.id,original,,,,,,,,,,,,,
+attribute type,attribute,,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
+blind,jfifVersion,,30,0,0,0,0,30,0,0,0,0,0,0
+blind,binwalkData,,30,0,0,0,0,30,0,0,0,0,0,0
+blind,fileHeader,,30,0,30,0,30,0,0,29,0,0,0,1
+blind,foremostCarving,,30,0,0,0,0,30,0,0,0,0,0,0
