@@ -165,13 +165,16 @@ class Attribution():
 
     def attribute(self):
         ATTR_JFIF_VERSION = None
-        with open("./exiftool.tmp", "r") as tmpData:
-            searchPattern = "JFIF Version:"
-            for l in tmpData:
-                minL = l.strip().replace("  ", "")
-                if re.search(searchPattern, minL):
-                    ATTR_JFIF_VERSION = minL
-                    break
+        try:
+            with open("./exiftool.tmp", "r") as tmpData:
+                searchPattern = "JFIF Version:"
+                for l in tmpData:
+                    minL = l.strip().replace("  ", "")
+                    if re.search(searchPattern, minL):
+                        ATTR_JFIF_VERSION = minL
+                        break
+        except:
+            pass
 
         ATTR_BINWALK = None
         with open("./binwalk.tmp", "r") as tmpData:
