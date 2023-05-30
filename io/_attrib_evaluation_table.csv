@@ -52,3 +52,10 @@ blind,foremostCarving,1000,0,0,0,0,0,1000,0,0,0,0,0
 non-blind,fileSize,1000,0,1282,0,0,0,359,641,0,0,641,0
 non-blind,colorMeanDifference,1000,0,0,0,0,0,1000,0,0,0,0,0
 
+original.id.id,original
+attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
+blind,jfifVersion,30,0,0,0,0,30,0,0,0,0,0,0
+blind,binwalkData,30,0,0,0,0,30,0,0,0,0,0,0
+blind,fileHeader,30,0,30,0,30,0,0,29,0,0,0,1
+blind,foremostCarving,30,0,0,0,0,30,0,0,0,0,0,0
+

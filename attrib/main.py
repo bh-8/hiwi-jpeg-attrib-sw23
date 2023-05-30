@@ -5,12 +5,14 @@ import customProgress
 import jsonLog
 import json
 
+#config
+blindAttributionOnly = True
+
 #lib-magic
 import magic
 mime = magic.Magic(mime=True)
 
-JPG_MIME = "image/jpeg" #jpg images only
-STEGO_TOOLS = ["f5", "jphide", "jsteg", "outguess", "steghide", "imrecompjpg"] #tools we can attribute
+STEGO_TOOLS = ["f5", "jphide", "jsteg", "outguess", "steghide", "imrecompjpg", "original"] #tools we can attribute
 
 INPUT_STRUCTURE = Path("./io").resolve()
 PATH_ORIG = INPUT_STRUCTURE.joinpath("./input")
@@ -62,9 +64,6 @@ for stegoToolId in STEGO_TOOLS:
 
             #do not use mime type to check format, as image file format structure could be corrupted
             inputMime = str(mime.from_file(potentialStegoFile))
-            #if inputMime != JPG_MIME:
-            #    progressBar.next()
-            #    continue
             if not potentialStegoFileName.lower().endswith((".jpg", ".jpeg")):
                 progressBar.next()
                 continue
@@ -72,7 +71,7 @@ for stegoToolId in STEGO_TOOLS:
             ##########
             # Attribution
 
-            attr = Attribution(jsonLogObj, potentialStegoFile, relatedOriginalFile, inputMime)
+            attr = Attribution(jsonLogObj, potentialStegoFile, relatedOriginalFile, inputMime, blindAttributionOnly)
             attr.execute()
             attr.attribute()
 

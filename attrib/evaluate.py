@@ -13,7 +13,7 @@ def evaluate(attribName, attribValue):
                 if "56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz" not in attribValue:
                     return ["jphide"]
                 if "!22222222222222222222222222222222222222222222222222" in attribValue and not "Exif" in attribValue:
-                    return ["outguess", "steghide"] #TODO: not clear: subject to validate!
+                    return ["outguess", "steghide"]
             return []
         case "foremostCarving":
             return ["jsteg"] if attribValue == None else []
@@ -23,7 +23,6 @@ def evaluate(attribName, attribValue):
             originalSize = int(commaSplit[1].split(":")[1].strip())
             differenceSize = int(commaSplit[2].split(":")[1].strip())
 
-            #TODO: and: more conservative, or: more aggressive
             if differenceSize < originalSize / 2 and stegoSize > originalSize / 2:
                 return ["jphide", "steghide"]
             return []

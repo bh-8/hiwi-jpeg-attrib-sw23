@@ -7,11 +7,12 @@ import os
 import glob
 
 class Attribution():
-    def __init__(self, jsonLog, sampleFile, originalFile, mime):
+    def __init__(self, jsonLog, sampleFile, originalFile, mime, blindAttribOnly = False):
         self.jsonLog = jsonLog
         self.sampleFile = sampleFile
         self.originalFile = originalFile
         self.mime = mime
+        self.blindAttribOnly = blindAttribOnly
     
     def runAttribTool(self, toolId, execParams):
         outData = open("./" + toolId + ".tmp", "w")
@@ -19,7 +20,7 @@ class Attribution():
         #print(str(execParams))
         run(execParams, stdout=outData, stderr=outData)
         outData.close()
-        
+    
     def execute(self):
         if Path("./foremost").exists():
             shutil.rmtree("./foremost")
@@ -55,79 +56,80 @@ class Attribution():
             "-i", str(self.sampleFile)
         ])
 
-        self.runAttribTool("exiftool_orig", [
-            "exiftool",
-            str(self.originalFile)
-        ])
-        self.runAttribTool("compare", [
-            "compare",
-            str(self.sampleFile),
-            str(self.originalFile),
-            "-compose", "src",
-            "-highlight-color", "black",
-            "./compare_out.jpg"
-        ])
-        self.runAttribTool("identify", [
-            "identify",
-            "-verbose",
-            "./compare_out.jpg"
-        ])
-        self.runAttribTool("stegoveritas", [
-            "stegoveritas",
-            "-out",
-            "./stegoveritas_original",
-            "-imageTransform",
-            str(self.originalFile)
-        ])
-        self.runAttribTool("stegoveritas", [
-            "stegoveritas",
-            "-out",
-            "./stegoveritas_stego",
-            "-meta",
-            "-imageTransform",
-            "-trailing",
-            "-steghide",
-            str(self.sampleFile)
-        ])
-        self.runAttribTool("compare_red", [
-            "compare",
-            "./stegoveritas_stego/" + self.sampleFile.name + "_red_plane.png",
-            "./stegoveritas_original/" + self.originalFile.name + "_red_plane.png",
-            "-compose", "src",
-            "-highlight-color", "black",
-            "./compare_red.png"
-        ])
-        self.runAttribTool("compare_green", [
-            "compare",
-            "./stegoveritas_stego/" + self.sampleFile.name + "_green_plane.png",
-            "./stegoveritas_original/" + self.originalFile.name + "_green_plane.png",
-            "-compose", "src",
-            "-highlight-color", "black",
-            "./compare_green.png"
-        ])
-        self.runAttribTool("compare_blue", [
-            "compare",
-            "./stegoveritas_stego/" + self.sampleFile.name + "_blue_plane.png",
-            "./stegoveritas_original/" + self.originalFile.name + "_blue_plane.png",
-            "-compose", "src",
-            "-highlight-color", "black",
-            "./compare_blue.png"
-        ])
-        self.runAttribTool("identify_red", [
-            "identify",
-            "-verbose",
-            "./compare_red.png"
-        ])
-        self.runAttribTool("identify_green", [
-            "identify",
-            "-verbose",
-            "./compare_green.png"
-        ])
-        self.runAttribTool("identify_blue", [
-            "identify",
-            "-verbose",
-            "./compare_blue.png"
-        ])
+        if not self.blindAttribOnly:
+            self.runAttribTool("exiftool_orig", [
+                "exiftool",
+                str(self.originalFile)
+            ])
+            self.runAttribTool("compare", [
+                "compare",
+                str(self.sampleFile),
+                str(self.originalFile),
+                "-compose", "src",
+                "-highlight-color", "black",
+                "./compare_out.jpg"
+            ])
+            self.runAttribTool("identify", [
+                "identify",
+                "-verbose",
+                "./compare_out.jpg"
+            ])
+            self.runAttribTool("stegoveritas", [
+                "stegoveritas",
+                "-out",
+                "./stegoveritas_original",
+                "-imageTransform",
+                str(self.originalFile)
+            ])
+            self.runAttribTool("stegoveritas", [
+                "stegoveritas",
+                "-out",
+                "./stegoveritas_stego",
+                "-meta",
+                "-imageTransform",
+                "-trailing",
+                "-steghide",
+                str(self.sampleFile)
+            ])
+            self.runAttribTool("compare_red", [
+                "compare",
+                "./stegoveritas_stego/" + self.sampleFile.name + "_red_plane.png",
+                "./stegoveritas_original/" + self.originalFile.name + "_red_plane.png",
+                "-compose", "src",
+                "-highlight-color", "black",
+                "./compare_red.png"
+            ])
+            self.runAttribTool("compare_green", [
+                "compare",
+                "./stegoveritas_stego/" + self.sampleFile.name + "_green_plane.png",
+                "./stegoveritas_original/" + self.originalFile.name + "_green_plane.png",
+                "-compose", "src",
+                "-highlight-color", "black",
+                "./compare_green.png"
+            ])
+            self.runAttribTool("compare_blue", [
+                "compare",
+                "./stegoveritas_stego/" + self.sampleFile.name + "_blue_plane.png",
+                "./stegoveritas_original/" + self.originalFile.name + "_blue_plane.png",
+                "-compose", "src",
+                "-highlight-color", "black",
+                "./compare_blue.png"
+            ])
+            self.runAttribTool("identify_red", [
+                "identify",
+                "-verbose",
+                "./compare_red.png"
+            ])
+            self.runAttribTool("identify_green", [
+                "identify",
+                "-verbose",
+                "./compare_green.png"
+            ])
+            self.runAttribTool("identify_blue", [
+                "identify",
+                "-verbose",
+                "./compare_blue.png"
+            ])
 
     def convertFileSize(self, fileSizeStr):
         split = fileSizeStr.split(":")[1].strip().split(" ")
@@ -190,14 +192,18 @@ class Attribution():
         if Path("./foremost/jpg/00000000.jpg").exists():
             ATTR_FOREMOST = "carved, extracted jpg"
 
-        stegoFileSize = self.parseFileSize("exiftool")
-        originalFileSize = self.parseFileSize("exiftool_orig")
-        ATTR_FILE_SIZE = "Stego File: " + str(stegoFileSize) + ", Original File: " + str(originalFileSize) + ", Difference: " + str(abs(stegoFileSize - originalFileSize))
+        ATTR_FILE_SIZE = None
+        ATTR_COLOR_MEAN_DIFF_DRGB = None
 
-        colorMeanDiffRed = self.parseColorMean("identify_red")
-        colorMeanDiffGreen = self.parseColorMean("identify_green")
-        colorMeanDiffBlue = self.parseColorMean("identify_blue")
-        ATTR_COLOR_MEAN_DIFF_DRGB = str(self.parseColorMean("identify")) + ", " + str(colorMeanDiffRed) + ", " + str(colorMeanDiffGreen) + ", " + str(colorMeanDiffBlue)
+        if not self.blindAttribOnly:
+            stegoFileSize = self.parseFileSize("exiftool")
+            originalFileSize = self.parseFileSize("exiftool_orig")
+            ATTR_FILE_SIZE = "Stego File: " + str(stegoFileSize) + ", Original File: " + str(originalFileSize) + ", Difference: " + str(abs(stegoFileSize - originalFileSize))
+
+            colorMeanDiffRed = self.parseColorMean("identify_red")
+            colorMeanDiffGreen = self.parseColorMean("identify_green")
+            colorMeanDiffBlue = self.parseColorMean("identify_blue")
+            ATTR_COLOR_MEAN_DIFF_DRGB = str(self.parseColorMean("identify")) + ", " + str(colorMeanDiffRed) + ", " + str(colorMeanDiffGreen) + ", " + str(colorMeanDiffBlue)
 
         self.jsonLog.add(LogEntry(
             str(self.sampleFile.name),

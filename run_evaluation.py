@@ -38,7 +38,7 @@ def evaluate(attribObj, attribType, attribName, stegoToolIdentifier):
     attribResult = attribObj[attribType][attribName]["result"]
 
     if(len(attribResult) == 0): #if no tools in result list --> attributed as original image
-        if stegoToolName == "imrecompjpg": #if true negative TODO: OR -> add flickr later
+        if stegoToolName == "imrecompjpg" or stegoToolName == "original":
             evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_true_negatives"] += 1
         else:
             evaluationDictionary[stegoToolIdentifier][attribType][attribName]["_false_negatives"] += 1
@@ -72,8 +72,9 @@ for jsonAttributionFile in list(inputDirectory.glob("*.attribution.json")):
     for attribution in jsonAttribution:
         for attrib in attribution["blindAttribs"]:
             evaluate(attribution, "blindAttribs", str(attrib), stegoManipulation)
-        for attrib in attribution["nonBlindAttribs"]:
-            evaluate(attribution, "nonBlindAttribs", str(attrib), stegoManipulation)
+        if "nonBlindAttribs" in attribution:
+            for attrib in attribution["nonBlindAttribs"]:
+                evaluate(attribution, "nonBlindAttribs", str(attrib), stegoManipulation)
 
 print("Writing results...")
 handle = open(inputDirectory.joinpath("_attrib_evaluation.json"), "w")
@@ -114,15 +115,16 @@ def jsonToCsv():
         outputCsv += "attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5" + "\n"
 
         bObj = tObj["blindAttribs"]
-        nbObj = tObj["nonBlindAttribs"]
 
         outputCsv += "blind,jfifVersion," + attribToCsv(bObj["jfifVersion"]) + "\n"
         outputCsv += "blind,binwalkData," + attribToCsv(bObj["binwalkData"]) + "\n"
         outputCsv += "blind,fileHeader," + attribToCsv(bObj["fileHeader"]) + "\n"
         outputCsv += "blind,foremostCarving," + attribToCsv(bObj["foremostCarving"]) + "\n"
         
-        outputCsv += "non-blind,fileSize," + attribToCsv(nbObj["fileSize"]) + "\n"
-        outputCsv += "non-blind,colorMeanDifference," + attribToCsv(nbObj["colorMeanDifference"]) + "\n"
+        if "nonBlindAttribs" in tObj:
+            nbObj = tObj["nonBlindAttribs"]
+            outputCsv += "non-blind,fileSize," + attribToCsv(nbObj["fileSize"]) + "\n"
+            outputCsv += "non-blind,colorMeanDifference," + attribToCsv(nbObj["colorMeanDifference"]) + "\n"
 
         outputCsv += "\n"
         
