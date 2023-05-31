@@ -6,7 +6,7 @@ import jsonLog
 import json
 
 #config
-blindAttributionOnly = True
+blindAttributionOnly = False
 
 #lib-magic
 import magic
