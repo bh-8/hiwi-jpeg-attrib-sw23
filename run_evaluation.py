@@ -4,6 +4,45 @@ import json
 
 inputDirectory = Path("./io").resolve()
 
+relevantAttribsDict = {
+    "jphide": [
+        "fileHeader",
+        "fileSize",
+        "colorMeanDifference"
+    ],
+    "jsteg": [
+        "jfifVersion",
+        "binwalkData",
+        "foremostCarving",
+        "fileHeader"
+    ],
+    "outguess": [
+        "fileHeader"
+    ],
+    "steghide": {
+        "fileHeader",
+        "fileSize",
+        "colorMeanDifference"
+    },
+    "f5": {
+        "fileHeader"
+    },
+    "imrecompjpg": {
+        "jfifVersion",
+        "binwalkData",
+        "foremostCarving",
+        "fileHeader",
+        "fileSize",
+        "colorMeanDifference"
+    },
+    "original": {
+        "jfifVersion",
+        "binwalkData",
+        "foremostCarving",
+        "fileHeader"
+    }
+}
+
 evaluationDictionary = {}
 
 def evaluate(attribObj, attribType, attribName, stegoToolIdentifier):
@@ -62,7 +101,11 @@ if not inputDirectory.exists():
     print("Could not find io directory at '" + str(inputDirectory) + "'!")
     sys.exit(10)
 
-for jsonAttributionFile in list(inputDirectory.glob("*.attribution.json")):
+jsonFileList = list(inputDirectory.glob("*.attribution.json"))
+
+jsonFileList.sort()
+
+for jsonAttributionFile in jsonFileList:
     print("Evaluating '" + str(jsonAttributionFile) + "'...")
     jsonAttributionHandler = open(jsonAttributionFile)
     jsonAttribution = json.load(jsonAttributionHandler)
@@ -115,16 +158,22 @@ def jsonToCsv():
         outputCsv += "attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5" + "\n"
 
         bObj = tObj["blindAttribs"]
-
-        outputCsv += "blind,jfifVersion," + attribToCsv(bObj["jfifVersion"]) + "\n"
-        outputCsv += "blind,binwalkData," + attribToCsv(bObj["binwalkData"]) + "\n"
-        outputCsv += "blind,fileHeader," + attribToCsv(bObj["fileHeader"]) + "\n"
-        outputCsv += "blind,foremostCarving," + attribToCsv(bObj["foremostCarving"]) + "\n"
+        
+        if "jfifVersion" in relevantAttribsDict[stegoToolName]:
+            outputCsv += "blind,jfifVersion," + attribToCsv(bObj["jfifVersion"]) + "\n"
+        if "binwalkData" in relevantAttribsDict[stegoToolName]:
+            outputCsv += "blind,binwalkData," + attribToCsv(bObj["binwalkData"]) + "\n"
+        if "foremostCarving" in relevantAttribsDict[stegoToolName]:
+            outputCsv += "blind,foremostCarving," + attribToCsv(bObj["foremostCarving"]) + "\n"
+        if "fileHeader" in relevantAttribsDict[stegoToolName]:
+            outputCsv += "blind,fileHeader," + attribToCsv(bObj["fileHeader"]) + "\n"
         
         if "nonBlindAttribs" in tObj:
             nbObj = tObj["nonBlindAttribs"]
-            outputCsv += "non-blind,fileSize," + attribToCsv(nbObj["fileSize"]) + "\n"
-            outputCsv += "non-blind,colorMeanDifference," + attribToCsv(nbObj["colorMeanDifference"]) + "\n"
+            if "fileSize" in relevantAttribsDict[stegoToolName]:
+                outputCsv += "non-blind,fileSize," + attribToCsv(nbObj["fileSize"]) + "\n"
+            if "colorMeanDifference" in relevantAttribsDict[stegoToolName]:
+                outputCsv += "non-blind,colorMeanDifference," + attribToCsv(nbObj["colorMeanDifference"]) + "\n"
 
         outputCsv += "\n"
         
