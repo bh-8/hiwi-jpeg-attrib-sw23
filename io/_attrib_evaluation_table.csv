@@ -1,3 +1,7 @@
+f5.26b-key128.attribution,f5
+attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
+blind,fileHeader,1000,1000,0,1000,0,0,0,0,0,0,0,1000
+
 f5.26b-recompressed.attribution,f5
 attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
 blind,fileHeader,1000,1000,0,1000,0,0,0,0,0,0,0,1000
@@ -9,6 +13,15 @@ blind,fileHeader,1000,1000,0,1000,0,0,0,0,0,0,0,1000
 f5.2kb.attribution,f5
 attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
 blind,fileHeader,1000,1000,0,1000,0,0,0,0,0,0,0,1000
+
+imrecompjpg.26b-key128.attribution,imrecompjpg
+attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
+blind,jfifVersion,1000,0,0,0,0,1000,0,0,0,0,0,0
+blind,binwalkData,1000,0,0,0,0,1000,0,0,0,0,0,0
+blind,foremostCarving,1000,0,0,0,0,1000,0,0,0,0,0,0
+blind,fileHeader,1000,0,1000,0,1000,0,0,1000,0,0,0,0
+non-blind,fileSize,1000,0,1134,0,0,433,0,567,0,0,567,0
+non-blind,colorMeanDifference,1000,0,650,0,0,675,0,325,0,0,325,0
 
 imrecompjpg.26b-recompressed.attribution,imrecompjpg
 attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
@@ -37,6 +50,12 @@ blind,fileHeader,1000,0,1000,0,1000,0,0,1000,0,0,0,0
 non-blind,fileSize,1000,0,1134,0,0,433,0,567,0,0,567,0
 non-blind,colorMeanDifference,1000,0,650,0,0,675,0,325,0,0,325,0
 
+jphide.26b-key128.attribution,jphide
+attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
+blind,fileHeader,1000,1000,0,1000,0,0,0,1000,0,0,0,0
+non-blind,fileSize,1000,1000,1000,0,0,0,0,1000,0,0,1000,0
+non-blind,colorMeanDifference,1000,923,923,0,0,0,77,923,0,0,923,0
+
 jphide.26b-recompressed.attribution,jphide
 attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
 blind,fileHeader,1000,1000,0,1000,0,0,0,1000,0,0,0,0
@@ -54,6 +73,13 @@ attribute type,attribute,total,correct in list,incorrect in list,true positives,
 blind,fileHeader,1000,1000,0,1000,0,0,0,1000,0,0,0,0
 non-blind,fileSize,1000,1000,1000,0,0,0,0,1000,0,0,1000,0
 non-blind,colorMeanDifference,1000,0,0,0,0,0,1000,0,0,0,0,0
+
+jsteg.26b-key128.attribution,jsteg
+attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
+blind,jfifVersion,1000,1000,0,1000,0,0,0,0,1000,0,0,0
+blind,binwalkData,1000,1000,0,1000,0,0,0,0,1000,0,0,0
+blind,foremostCarving,1000,1000,0,1000,0,0,0,0,1000,0,0,0
+blind,fileHeader,1000,1000,0,1000,0,0,0,0,1000,0,0,0
 
 jsteg.26b-recompressed.attribution,jsteg
 attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
@@ -83,6 +109,10 @@ blind,binwalkData,31783,0,0,0,0,31783,0,0,0,0,0,0
 blind,foremostCarving,31783,0,0,0,0,31783,0,0,0,0,0,0
 blind,fileHeader,31783,0,31783,0,31783,0,0,31159,0,0,0,624
 
+outguess.26b-key128.attribution,outguess
+attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
+blind,fileHeader,1000,1000,1000,0,0,0,0,0,0,1000,1000,0
+
 outguess.26b-recompressed.attribution,outguess
 attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
 blind,fileHeader,1000,1000,1000,0,0,0,0,0,0,1000,1000,0
@@ -94,6 +124,12 @@ blind,fileHeader,1000,1000,1000,0,0,0,0,0,0,1000,1000,0
 outguess.2kb.attribution,outguess
 attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
 blind,fileHeader,1000,563,563,0,0,0,437,0,0,563,563,0
+
+steghide.26b-key128.attribution,steghide
+attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
+blind,fileHeader,1000,338,338,0,0,0,662,0,0,338,338,0
+non-blind,fileSize,1000,1000,1000,0,0,0,0,1000,0,0,1000,0
+non-blind,colorMeanDifference,1000,992,992,0,0,0,8,992,0,0,992,0
 
 steghide.26b-recompressed.attribution,steghide
 attribute type,attribute,total,correct in list,incorrect in list,true positives,false positives,true negatives,false negatives,jphide,jsteg,outguess,steghide,f5
