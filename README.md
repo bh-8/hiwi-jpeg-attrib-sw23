@@ -1,4 +1,6 @@
-# Jpeg attribution
+# JPEG attribution
+INFO: This repository is discontinued. The attributes which found to perform the best (attributing `jsteg`, `f5` and `outguess`) have been implemented in a new JPEG analysis tool called [JPEG investigator](https://github.com/birnbaum01/hiwi-jpeg-investigator).
+---
 More efficient implementation in Python featuring more detailed evaluation of identified jpeg stego attributes.
 | attribution type | attribute | attribution tool | targeted stego tools |
 | --- | --- | --- | --- |
